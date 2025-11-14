@@ -13,11 +13,10 @@ lex.yy.c: lexer.l parser.tab.h
 parser.tab.c parser.tab.h: parser.y
 	$(BISON) -d parser.y
 
-clean:
-	rm -f lex.yy.c parser.tab.c parser.tab.h compilador output.asm
-
 test: compilador
-	./compilador
-	cat output.asm
+	./compilador teste1.rl
+
+clean:
+	rm -f lex.yy.c parser.tab.c parser.tab.h compilador
 
 .PHONY: all test clean

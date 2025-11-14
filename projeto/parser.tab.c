@@ -78,16 +78,17 @@ extern FILE *yyin;
 extern int yylex();
 void yyerror(const char *s);
 
-// Função para gerar código assembly
-void emit(const char *format, ...);
-void emit_label(const char *format, int label);
-int new_label();
+void emit(const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    vprintf(format, args);
+    printf("\n");
+    va_end(args);
+}
 
-// Arquivo de saída
-FILE *output_file;
 int label_count = 0;
 
-#line 91 "parser.tab.c"
+#line 92 "parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -118,45 +119,22 @@ enum yysymbol_kind_t
   YYSYMBOL_YYEOF = 0,                      /* "end of file"  */
   YYSYMBOL_YYerror = 1,                    /* error  */
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
-  YYSYMBOL_NUMERO = 3,                     /* NUMERO  */
-  YYSYMBOL_IDENTIFICADOR = 4,              /* IDENTIFICADOR  */
-  YYSYMBOL_ENERGY = 5,                     /* ENERGY  */
-  YYSYMBOL_STEPS = 6,                      /* STEPS  */
-  YYSYMBOL_FRENTE_LIVRE = 7,               /* FRENTE_LIVRE  */
-  YYSYMBOL_CARREGANDO = 8,                 /* CARREGANDO  */
-  YYSYMBOL_ANDAR = 9,                      /* ANDAR  */
-  YYSYMBOL_VIRAR_ESQ = 10,                 /* VIRAR_ESQ  */
-  YYSYMBOL_VIRAR_DIR = 11,                 /* VIRAR_DIR  */
-  YYSYMBOL_PEGAR = 12,                     /* PEGAR  */
-  YYSYMBOL_LARGAR = 13,                    /* LARGAR  */
-  YYSYMBOL_SE = 14,                        /* SE  */
-  YYSYMBOL_SENAO = 15,                     /* SENAO  */
-  YYSYMBOL_ENQUANTO = 16,                  /* ENQUANTO  */
-  YYSYMBOL_VERDADEIRO = 17,                /* VERDADEIRO  */
-  YYSYMBOL_FALSO = 18,                     /* FALSO  */
-  YYSYMBOL_IGUAL = 19,                     /* IGUAL  */
-  YYSYMBOL_MENOR = 20,                     /* MENOR  */
-  YYSYMBOL_MAIOR = 21,                     /* MAIOR  */
-  YYSYMBOL_MAIS = 22,                      /* MAIS  */
-  YYSYMBOL_MENOS = 23,                     /* MENOS  */
-  YYSYMBOL_MULT = 24,                      /* MULT  */
-  YYSYMBOL_DIV = 25,                       /* DIV  */
-  YYSYMBOL_NAO = 26,                       /* NAO  */
-  YYSYMBOL_ATRIBUICAO = 27,                /* ATRIBUICAO  */
-  YYSYMBOL_CHAVE_ABRE = 28,                /* CHAVE_ABRE  */
-  YYSYMBOL_CHAVE_FECHA = 29,               /* CHAVE_FECHA  */
-  YYSYMBOL_PAREN_ABRE = 30,                /* PAREN_ABRE  */
-  YYSYMBOL_PAREN_FECHA = 31,               /* PAREN_FECHA  */
-  YYSYMBOL_PONTO_VIRGULA = 32,             /* PONTO_VIRGULA  */
-  YYSYMBOL_YYACCEPT = 33,                  /* $accept  */
-  YYSYMBOL_programa = 34,                  /* programa  */
-  YYSYMBOL_comando_lista = 35,             /* comando_lista  */
-  YYSYMBOL_comando = 36,                   /* comando  */
-  YYSYMBOL_atribuicao = 37,                /* atribuicao  */
-  YYSYMBOL_acao = 38,                      /* acao  */
-  YYSYMBOL_condicional = 39,               /* condicional  */
-  YYSYMBOL_loop = 40,                      /* loop  */
-  YYSYMBOL_expressao = 41                  /* expressao  */
+  YYSYMBOL_ENERGY = 3,                     /* ENERGY  */
+  YYSYMBOL_STEPS = 4,                      /* STEPS  */
+  YYSYMBOL_NUMERO = 5,                     /* NUMERO  */
+  YYSYMBOL_ANDAR = 6,                      /* ANDAR  */
+  YYSYMBOL_VIRAR_ESQ = 7,                  /* VIRAR_ESQ  */
+  YYSYMBOL_VIRAR_DIR = 8,                  /* VIRAR_DIR  */
+  YYSYMBOL_PONTO_VIRGULA = 9,              /* PONTO_VIRGULA  */
+  YYSYMBOL_ATRIBUICAO = 10,                /* ATRIBUICAO  */
+  YYSYMBOL_PAREN_ABRE = 11,                /* PAREN_ABRE  */
+  YYSYMBOL_PAREN_FECHA = 12,               /* PAREN_FECHA  */
+  YYSYMBOL_YYACCEPT = 13,                  /* $accept  */
+  YYSYMBOL_programa = 14,                  /* programa  */
+  YYSYMBOL_comando_lista = 15,             /* comando_lista  */
+  YYSYMBOL_comando = 16,                   /* comando  */
+  YYSYMBOL_atribuicao = 17,                /* atribuicao  */
+  YYSYMBOL_acao = 18                       /* acao  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -482,21 +460,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  24
+#define YYFINAL  16
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   95
+#define YYLAST   20
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  33
+#define YYNTOKENS  13
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  9
+#define YYNNTS  6
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  28
+#define YYNRULES  11
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  63
+#define YYNSTATES  25
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   287
+#define YYMAXUTOK   267
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -536,18 +514,15 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    32
+       5,     6,     7,     8,     9,    10,    11,    12
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    43,    43,    47,    48,    52,    53,    54,    55,    59,
-      71,    72,    73,    74,    75,    79,    85,    99,   113,   114,
-     115,   116,   117,   118,   119,   120,   121,   122,   123
+       0,    29,    29,    33,    34,    38,    39,    43,    44,    48,
+      49,    50
 };
 #endif
 
@@ -563,14 +538,10 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "\"end of file\"", "error", "\"invalid token\"", "NUMERO",
-  "IDENTIFICADOR", "ENERGY", "STEPS", "FRENTE_LIVRE", "CARREGANDO",
-  "ANDAR", "VIRAR_ESQ", "VIRAR_DIR", "PEGAR", "LARGAR", "SE", "SENAO",
-  "ENQUANTO", "VERDADEIRO", "FALSO", "IGUAL", "MENOR", "MAIOR", "MAIS",
-  "MENOS", "MULT", "DIV", "NAO", "ATRIBUICAO", "CHAVE_ABRE", "CHAVE_FECHA",
-  "PAREN_ABRE", "PAREN_FECHA", "PONTO_VIRGULA", "$accept", "programa",
-  "comando_lista", "comando", "atribuicao", "acao", "condicional", "loop",
-  "expressao", YY_NULLPTR
+  "\"end of file\"", "error", "\"invalid token\"", "ENERGY", "STEPS",
+  "NUMERO", "ANDAR", "VIRAR_ESQ", "VIRAR_DIR", "PONTO_VIRGULA",
+  "ATRIBUICAO", "PAREN_ABRE", "PAREN_FECHA", "$accept", "programa",
+  "comando_lista", "comando", "atribuicao", "acao", YY_NULLPTR
 };
 
 static const char *
@@ -580,7 +551,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-28)
+#define YYPACT_NINF (-9)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -594,13 +565,9 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      61,   -25,   -27,   -26,   -16,   -15,   -14,    -5,     4,     5,
-      61,   -28,     6,     9,   -28,   -28,    50,    -4,    13,    16,
-      23,    28,    50,    50,   -28,   -28,   -28,   -28,   -28,   -28,
-     -28,   -28,   -28,   -28,   -28,    50,    66,   -28,   -28,   -28,
-     -28,   -28,    59,    64,    66,    50,    50,    50,    22,    32,
-      66,    66,    66,    61,    61,    -3,     8,    21,   -28,    33,
-      61,    19,   -28
+      -3,    -8,    -4,    -2,    -1,     0,     7,    -3,    -9,     3,
+       4,     9,    10,     5,     6,     8,    -9,    -9,    -9,    -9,
+      -9,    -9,    -9,    -9,    -9
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -608,25 +575,21 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       2,     3,     0,     0,     7,     8,     0,     0,     0,     0,
-       0,     0,     0,     0,     1,     4,     5,     6,    18,    19,
-      20,    21,    22,    23,    24,     0,     9,    10,    11,    12,
-      13,    14,     0,     0,    28,     0,     0,     0,     0,     0,
-      27,    25,    26,     0,     0,     0,     0,    15,    17,     0,
-       0,     0,    16
+       0,     0,     0,     0,     0,     0,     0,     2,     3,     0,
+       0,     0,     0,     0,     0,     0,     1,     4,     5,     6,
+       7,     8,     9,    10,    11
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -28,   -28,   -11,   -10,   -28,   -28,   -28,   -28,    17
+      -9,    -9,    -9,     1,    -9,    -9
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     9,    10,    11,    12,    13,    14,    15,    36
+       0,     6,     7,     8,     9,    10
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -634,59 +597,39 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      25,     1,    16,    17,    18,    24,     2,     3,     4,     5,
-       6,     7,     1,     8,    19,    20,    21,     2,     3,     4,
-       5,     6,     7,     1,     8,    22,    57,    37,     2,     3,
-       4,     5,     6,     7,    23,     8,    59,    58,    26,    42,
-      43,    27,    55,    56,    38,    25,    25,    39,    62,    61,
-      53,    25,    44,    28,    40,    29,    30,    31,    32,    41,
-      54,    60,    50,    51,    52,     1,     0,    33,    34,     0,
-       2,     3,     4,     5,     6,     7,    35,     8,    45,     0,
-       0,    46,    47,    45,     0,    45,    46,    47,    46,    47,
-      48,     0,     0,     0,     0,    49
+       1,     2,    11,     3,     4,     5,    12,    16,    17,    13,
+      14,    15,    18,    19,    20,    21,     0,    22,    23,     0,
+      24
 };
 
 static const yytype_int8 yycheck[] =
 {
-      10,     4,    27,    30,    30,     0,     9,    10,    11,    12,
-      13,    14,     4,    16,    30,    30,    30,     9,    10,    11,
-      12,    13,    14,     4,    16,    30,    29,    31,     9,    10,
-      11,    12,    13,    14,    30,    16,    15,    29,    32,    22,
-      23,    32,    53,    54,    31,    55,    56,    31,    29,    60,
-      28,    61,    35,     3,    31,     5,     6,     7,     8,    31,
-      28,    28,    45,    46,    47,     4,    -1,    17,    18,    -1,
-       9,    10,    11,    12,    13,    14,    26,    16,    19,    -1,
-      -1,    22,    23,    19,    -1,    19,    22,    23,    22,    23,
-      31,    -1,    -1,    -1,    -1,    31
+       3,     4,    10,     6,     7,     8,    10,     0,     7,    11,
+      11,    11,     9,     9,     5,     5,    -1,    12,    12,    -1,
+      12
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     4,     9,    10,    11,    12,    13,    14,    16,    34,
-      35,    36,    37,    38,    39,    40,    27,    30,    30,    30,
-      30,    30,    30,    30,     0,    36,    32,    32,     3,     5,
-       6,     7,     8,    17,    18,    26,    41,    31,    31,    31,
-      31,    31,    41,    41,    41,    19,    22,    23,    31,    31,
-      41,    41,    41,    28,    28,    35,    35,    29,    29,    15,
-      28,    35,    29
+       0,     3,     4,     6,     7,     8,    14,    15,    16,    17,
+      18,    10,    10,    11,    11,    11,     0,    16,     9,     9,
+       5,     5,    12,    12,    12
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    33,    34,    35,    35,    36,    36,    36,    36,    37,
-      38,    38,    38,    38,    38,    39,    39,    40,    41,    41,
-      41,    41,    41,    41,    41,    41,    41,    41,    41
+       0,    13,    14,    15,    15,    16,    16,    17,    17,    18,
+      18,    18
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     1,     2,     2,     2,     1,     1,     3,
-       3,     3,     3,     3,     3,     7,    11,     7,     1,     1,
-       1,     1,     1,     1,     1,     3,     3,     3,     2
+       0,     2,     1,     1,     2,     2,     2,     3,     3,     3,
+       3,     3
 };
 
 
@@ -1149,157 +1092,38 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 9: /* atribuicao: IDENTIFICADOR ATRIBUICAO expressao  */
-#line 60 "parser.y"
-    {
-        if (strcmp((yyvsp[-2].id), "energy") == 0) {
-            emit("SET ENERGY %d", (yyvsp[0].num));
-        } else if (strcmp((yyvsp[-2].id), "steps") == 0) {
-            emit("SET STEPS %d", (yyvsp[0].num));
-        }
-        free((yyvsp[-2].id));
-    }
-#line 1163 "parser.tab.c"
+  case 7: /* atribuicao: ENERGY ATRIBUICAO NUMERO  */
+#line 43 "parser.y"
+                             { emit("SET ENERGY %d", yyvsp[0]); }
+#line 1099 "parser.tab.c"
     break;
 
-  case 10: /* acao: ANDAR PAREN_ABRE PAREN_FECHA  */
-#line 71 "parser.y"
+  case 8: /* atribuicao: STEPS ATRIBUICAO NUMERO  */
+#line 44 "parser.y"
+                              { emit("SET STEPS %d", yyvsp[0]); }
+#line 1105 "parser.tab.c"
+    break;
+
+  case 9: /* acao: ANDAR PAREN_ABRE PAREN_FECHA  */
+#line 48 "parser.y"
                                    { emit("ROBO_ANDAR"); }
-#line 1169 "parser.tab.c"
+#line 1111 "parser.tab.c"
     break;
 
-  case 11: /* acao: VIRAR_ESQ PAREN_ABRE PAREN_FECHA  */
-#line 72 "parser.y"
+  case 10: /* acao: VIRAR_ESQ PAREN_ABRE PAREN_FECHA  */
+#line 49 "parser.y"
                                        { emit("ROBO_VIRAR_ESQ"); }
-#line 1175 "parser.tab.c"
+#line 1117 "parser.tab.c"
     break;
 
-  case 12: /* acao: VIRAR_DIR PAREN_ABRE PAREN_FECHA  */
-#line 73 "parser.y"
+  case 11: /* acao: VIRAR_DIR PAREN_ABRE PAREN_FECHA  */
+#line 50 "parser.y"
                                        { emit("ROBO_VIRAR_DIR"); }
-#line 1181 "parser.tab.c"
-    break;
-
-  case 13: /* acao: PEGAR PAREN_ABRE PAREN_FECHA  */
-#line 74 "parser.y"
-                                       { emit("ROBO_PEGAR"); }
-#line 1187 "parser.tab.c"
-    break;
-
-  case 14: /* acao: LARGAR PAREN_ABRE PAREN_FECHA  */
-#line 75 "parser.y"
-                                       { emit("ROBO_LARGAR"); }
-#line 1193 "parser.tab.c"
-    break;
-
-  case 15: /* condicional: SE PAREN_ABRE expressao PAREN_FECHA CHAVE_ABRE comando_lista CHAVE_FECHA  */
-#line 80 "parser.y"
-    {
-        int end_label = new_label();
-        emit("DECJZ ENERGY label_%d", end_label);
-        emit_label("label_%d", end_label);
-    }
-#line 1203 "parser.tab.c"
-    break;
-
-  case 16: /* condicional: SE PAREN_ABRE expressao PAREN_FECHA CHAVE_ABRE comando_lista CHAVE_FECHA SENAO CHAVE_ABRE comando_lista CHAVE_FECHA  */
-#line 86 "parser.y"
-    {
-        int else_label = new_label();
-        int end_label = new_label();
-        
-        emit("DECJZ ENERGY label_%d", else_label);
-        emit("GOTO label_%d", end_label);
-        emit_label("label_%d", else_label);
-        // código do else vai aqui
-        emit_label("label_%d", end_label);
-    }
-#line 1218 "parser.tab.c"
-    break;
-
-  case 17: /* loop: ENQUANTO PAREN_ABRE expressao PAREN_FECHA CHAVE_ABRE comando_lista CHAVE_FECHA  */
-#line 100 "parser.y"
-    {
-        int start_label = new_label();
-        int end_label = new_label();
-        
-        emit_label("label_%d", start_label);
-        emit("DECJZ ENERGY label_%d", end_label);
-        // código do loop vai aqui
-        emit("GOTO label_%d", start_label);
-        emit_label("label_%d", end_label);
-    }
-#line 1233 "parser.tab.c"
-    break;
-
-  case 18: /* expressao: NUMERO  */
-#line 113 "parser.y"
-                             { (yyval.num) = (yyvsp[0].num); }
-#line 1239 "parser.tab.c"
-    break;
-
-  case 19: /* expressao: ENERGY  */
-#line 114 "parser.y"
-                             { emit("PUSH ENERGY"); (yyval.num) = 1; }
-#line 1245 "parser.tab.c"
-    break;
-
-  case 20: /* expressao: STEPS  */
-#line 115 "parser.y"
-                             { emit("PUSH STEPS"); (yyval.num) = 1; }
-#line 1251 "parser.tab.c"
-    break;
-
-  case 21: /* expressao: FRENTE_LIVRE  */
-#line 116 "parser.y"
-                             { emit("ROBO_FRENTE_LIVRE"); (yyval.num) = 1; }
-#line 1257 "parser.tab.c"
-    break;
-
-  case 22: /* expressao: CARREGANDO  */
-#line 117 "parser.y"
-                             { emit("ROBO_TEM_OBJETO"); (yyval.num) = 1; }
-#line 1263 "parser.tab.c"
-    break;
-
-  case 23: /* expressao: VERDADEIRO  */
-#line 118 "parser.y"
-                             { (yyval.num) = 1; }
-#line 1269 "parser.tab.c"
-    break;
-
-  case 24: /* expressao: FALSO  */
-#line 119 "parser.y"
-                             { (yyval.num) = 0; }
-#line 1275 "parser.tab.c"
-    break;
-
-  case 25: /* expressao: expressao MAIS expressao  */
-#line 120 "parser.y"
-                               { emit("ADD"); (yyval.num) = 1; }
-#line 1281 "parser.tab.c"
-    break;
-
-  case 26: /* expressao: expressao MENOS expressao  */
-#line 121 "parser.y"
-                                { emit("SUB"); (yyval.num) = 1; }
-#line 1287 "parser.tab.c"
-    break;
-
-  case 27: /* expressao: expressao IGUAL expressao  */
-#line 122 "parser.y"
-                                { emit("CMP"); (yyval.num) = 1; }
-#line 1293 "parser.tab.c"
-    break;
-
-  case 28: /* expressao: NAO expressao  */
-#line 123 "parser.y"
-                             { emit("NOT"); (yyval.num) = 1; }
-#line 1299 "parser.tab.c"
+#line 1123 "parser.tab.c"
     break;
 
 
-#line 1303 "parser.tab.c"
+#line 1127 "parser.tab.c"
 
       default: break;
     }
@@ -1492,28 +1316,11 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 126 "parser.y"
+#line 53 "parser.y"
 
 
 void yyerror(const char *s) {
     fprintf(stderr, "Erro sintático: %s\n", s);
-}
-
-void emit(const char *format, ...) {
-    va_list args;
-    va_start(args, format);
-    vfprintf(output_file, format, args);
-    fprintf(output_file, "\n");
-    va_end(args);
-}
-
-void emit_label(const char *format, int label) {
-    fprintf(output_file, format, label);
-    fprintf(output_file, ":\n");
-}
-
-int new_label() {
-    return label_count++;
 }
 
 int main(int argc, char *argv[]) {
@@ -1523,18 +1330,14 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "Erro ao abrir arquivo: %s\n", argv[1]);
             return 1;
         }
+    } else {
+        yyin = stdin;
     }
     
-    output_file = fopen("output.asm", "w");
-    if (!output_file) {
-        fprintf(stderr, "Erro ao criar arquivo de saída\n");
-        return 1;
-    }
-    
+    printf("=== INICIANDO COMPILAÇÃO ===\n");
     yyparse();
+    printf("=== COMPILAÇÃO CONCLUÍDA ===\n");
     
-    fclose(output_file);
     if (argc > 1) fclose(yyin);
-    
     return 0;
 }

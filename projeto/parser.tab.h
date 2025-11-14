@@ -54,53 +54,23 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    NUMERO = 258,                  /* NUMERO  */
-    IDENTIFICADOR = 259,           /* IDENTIFICADOR  */
-    ENERGY = 260,                  /* ENERGY  */
-    STEPS = 261,                   /* STEPS  */
-    FRENTE_LIVRE = 262,            /* FRENTE_LIVRE  */
-    CARREGANDO = 263,              /* CARREGANDO  */
-    ANDAR = 264,                   /* ANDAR  */
-    VIRAR_ESQ = 265,               /* VIRAR_ESQ  */
-    VIRAR_DIR = 266,               /* VIRAR_DIR  */
-    PEGAR = 267,                   /* PEGAR  */
-    LARGAR = 268,                  /* LARGAR  */
-    SE = 269,                      /* SE  */
-    SENAO = 270,                   /* SENAO  */
-    ENQUANTO = 271,                /* ENQUANTO  */
-    VERDADEIRO = 272,              /* VERDADEIRO  */
-    FALSO = 273,                   /* FALSO  */
-    IGUAL = 274,                   /* IGUAL  */
-    MENOR = 275,                   /* MENOR  */
-    MAIOR = 276,                   /* MAIOR  */
-    MAIS = 277,                    /* MAIS  */
-    MENOS = 278,                   /* MENOS  */
-    MULT = 279,                    /* MULT  */
-    DIV = 280,                     /* DIV  */
-    NAO = 281,                     /* NAO  */
-    ATRIBUICAO = 282,              /* ATRIBUICAO  */
-    CHAVE_ABRE = 283,              /* CHAVE_ABRE  */
-    CHAVE_FECHA = 284,             /* CHAVE_FECHA  */
-    PAREN_ABRE = 285,              /* PAREN_ABRE  */
-    PAREN_FECHA = 286,             /* PAREN_FECHA  */
-    PONTO_VIRGULA = 287            /* PONTO_VIRGULA  */
+    ENERGY = 258,                  /* ENERGY  */
+    STEPS = 259,                   /* STEPS  */
+    NUMERO = 260,                  /* NUMERO  */
+    ANDAR = 261,                   /* ANDAR  */
+    VIRAR_ESQ = 262,               /* VIRAR_ESQ  */
+    VIRAR_DIR = 263,               /* VIRAR_DIR  */
+    PONTO_VIRGULA = 264,           /* PONTO_VIRGULA  */
+    ATRIBUICAO = 265,              /* ATRIBUICAO  */
+    PAREN_ABRE = 266,              /* PAREN_ABRE  */
+    PAREN_FECHA = 267              /* PAREN_FECHA  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-union YYSTYPE
-{
-#line 21 "parser.y"
-
-    int num;
-    char *id;
-
-#line 101 "parser.tab.h"
-
-};
-typedef union YYSTYPE YYSTYPE;
+typedef int YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
