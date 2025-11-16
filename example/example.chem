@@ -1,0 +1,10 @@
+heat to 80
+reaction "Evaporation" at 80 for 10
+stir 3
+cool to 40
+repeat 2 {
+  reaction "Reheat Cycle" at 60 for 5
+  wait 2
+}
+measure
+halt

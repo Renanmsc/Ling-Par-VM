@@ -54,23 +54,38 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    ENERGY = 258,                  /* ENERGY  */
-    STEPS = 259,                   /* STEPS  */
-    NUMERO = 260,                  /* NUMERO  */
-    ANDAR = 261,                   /* ANDAR  */
-    VIRAR_ESQ = 262,               /* VIRAR_ESQ  */
-    VIRAR_DIR = 263,               /* VIRAR_DIR  */
-    PONTO_VIRGULA = 264,           /* PONTO_VIRGULA  */
-    ATRIBUICAO = 265,              /* ATRIBUICAO  */
-    PAREN_ABRE = 266,              /* PAREN_ABRE  */
-    PAREN_FECHA = 267              /* PAREN_FECHA  */
+    REACTION = 258,                /* REACTION  */
+    AT = 259,                      /* AT  */
+    FOR = 260,                     /* FOR  */
+    HEAT = 261,                    /* HEAT  */
+    TO = 262,                      /* TO  */
+    COOL = 263,                    /* COOL  */
+    STIR = 264,                    /* STIR  */
+    WAIT = 265,                    /* WAIT  */
+    MEASURE = 266,                 /* MEASURE  */
+    REPEAT = 267,                  /* REPEAT  */
+    HALT = 268,                    /* HALT  */
+    NUMBER = 269,                  /* NUMBER  */
+    STRING = 270,                  /* STRING  */
+    LBRACE = 271,                  /* LBRACE  */
+    RBRACE = 272                   /* RBRACE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 56 "parser.y"
+
+    int ival;
+    char *sval;
+
+#line 86 "parser.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

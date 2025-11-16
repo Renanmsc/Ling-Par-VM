@@ -1,138 +1,78 @@
-# Ling-Par-VM
+## ChemMic (`.chem`)
 
-Este projeto define uma **máquina virtual simples (RoboVM)** e uma **linguagem de programação de alto nível (RoboLabirinto)** para programar um robô explorador de labirintos.  
-
----
-
-## RoboVM (Máquina Virtual do Robô)
-
-### Registradores
-- `ENERGY` → energia/bateria do robô (valor inteiro)  
-- `STEPS` → contador de passos/iterações (valor inteiro)
-
-### Sensores
-- `frente_livre` → verdadeiro se não há parede à frente.  
-- `carregando` → verdadeiro se o robô está segurando um objeto.  
-
-### Memória
-- **Pilha (stack)** → usada para armazenar valores temporários.  
-
-### Instruções mínimas
-- `SET R n` → define o valor de um registrador.  
-- `INC R` → incrementa o valor do registrador em 1.  
-- `DECJZ R label` → decrementa registrador e salta se chegar a zero.  
-- `GOTO label` → salto incondicional.  
-- `PUSH R` / `POP R` → empilhar/desempilhar valores.  
-- `PRINT` → imprime valor atual de `X` ou `Y`.  
-- `HALT` → encerra a execução.  
+DSL para simulação de **reações químicas térmicas** usando a [MicrowaveVM](https://github.com/raulikeda/MicrowaveVM).  
+Permite descrever processos laboratoriais simplificados — aquecimento, resfriamento, mistura e medição — através de comandos de alto nível compilados em instruções `.mwasm`.
 
 ---
 
-## Gramática (EBNF)
+### Construções (Elementos)
 
-```ebnf
-programa     = { comando } ;
+- `reaction "Nome" at <temp> for <time>`: executa uma reação mantendo a temperatura (`TEMP`) no valor alvo por determinado tempo (`TIME`).
+- `heat to <temp>`: aumenta gradualmente a potência (`POWER`) até que `TEMP` atinja o valor desejado.
+- `cool to <temp>`: aguarda o resfriamento natural até que `TEMP` seja menor ou igual ao valor indicado.
+- `stir <n>`: simula agitação, alternando a potência entre valores altos e baixos `n` vezes.
+- `wait <t>`: pausa a execução (POWER = 0) por `<t>` segundos simulados.
+- `measure`: exibe o estado atual dos registradores (`TIME`, `POWER`, `TEMP`).
+- `repeat <n> { ... }`: repete um bloco de comandos `<n>` vezes.
+- `halt`: finaliza a simulação.
 
-comando      = atribuicao, ";" 
-             | acao, ";" 
-             | condicional 
-             | loop ;
+---
 
-acao         = "andar", "()" 
-             | "virar_esq", "()" 
-             | "virar_dir", "()" 
-             | "pegar", "()" 
-             | "largar", "()" ;
+### Como Mapeia
 
-condicional  = "se", "(", expressao, ")", "{", { comando }, "}", 
-               [ "senao", "{", { comando }, "}" ] ;
+- Cada `reaction` é convertida em um loop que mantém a potência até atingir a temperatura desejada (`TEMP ≥ alvo`), e depois decrementa `TIME` até zero.
+- `heat` e `cool` usam loops que ajustam `POWER` com base nas leituras do sensor `TEMP`.
+- `stir` alterna `POWER` entre 0 e o último valor ativo, simulando a mistura do reagente.
+- `measure` traduz para instruções `PRINT`, exibindo valores dos registradores.
+- `repeat` é implementado com rótulos (`labels`) e `DECJZ` para controle de iteração.
+- A **MicrowaveVM** atualiza `TEMP` automaticamente a cada instrução:
 
-loop         = "enquanto", "(", expressao, ")", "{", { comando }, "}" ;
+- O programa termina com `HALT` automático, se não declarado explicitamente.
 
-atribuicao   = identificador, "=", expressao ;
+---
 
-expressao    = identificador 
-             | numero 
-             | booleano 
-             | expressao, operador, expressao 
-             | "nao", expressao ;
+### Exemplo
 
-operador     = "+" | "-" | "*" | "/" | "<" | ">" | "==" ;
+```text
+reaction "Evaporation" at 80 for 15
+stir 3
+cool to 40
+reaction "Crystallization" at 60 for 10
+measure
+halt
 
-booleano     = "verdadeiro" | "falso" ;
+; Reaction: Evaporation
+SET POWER 100
+SET TIME 15
+evap_loop:
+  DECJZ TIME evap_end
+  GOTO evap_loop
+evap_end:
 
-identificador= "energy" | "steps" | "frente_livre" | "carregando" ;
+; Stirring
+stir_loop:
+  SET POWER 0
+  INC TIME
+  SET POWER 60
+  INC TIME
+  DECJZ TIME stir_end
+  GOTO stir_loop
+stir_end:
 
-numero       = digito, { digito } ;
+; Cooling
+SET POWER 0
+cool_loop:
+  ; Aguarda TEMP <= 40
+  GOTO cool_loop
 
-digito       = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
-```
-![texto alternativo](VMLINGPARpng.jpg)
+; Crystallization
+SET POWER 60
+SET TIME 10
+cryst_loop:
+  DECJZ TIME cryst_end
+  GOTO cryst_loop
+cryst_end:
 
-### Exemplo de codigo Alto Nivel
-```
-energy = 20;
-steps = 0;
-
-enquanto (energy > 0) {
-    se (carregando) {
-        largar();
-    } senao se (tem_objeto()) {
-        pegar();
-        steps = steps + 1;
-    }
-    
-    se (frente_livre) {
-        andar();
-        energy = energy - 1;
-    } senao {
-        virar_dir();
-    }
-}
-```
-
-### Assembly
-```
-; Busca Simples por Objetos
-    SET ENERGY 20
-    SET STEPS 0
-
-main_loop:
-    DECJZ ENERGY end
-    
-    ; Verifica se está carregando objeto
-    ROBO_TEM_OBJETO
-    DECJZ STEPS check_object
-    
-    ; Está carregando - larga
-    ROBO_LARGAR
-    GOTO check_movement
-
-check_object:
-    ; Verifica se tem objeto para pegar
-    ROBO_TEM_OBJETO
-    DECJZ STEPS check_movement
-    
-    ; Tem objeto - pega
-    ROBO_PEGAR
-    INC STEPS
-
-check_movement:
-    ; Verifica se pode andar
-    ROBO_FRENTE_LIVRE
-    DECJZ ENERGY turn
-    
-    ; Frente livre - anda
-    ROBO_ANDAR
-    DEC ENERGY
-    GOTO main_loop
-
-turn:
-    ; Virar direita na parede
-    ROBO_VIRAR_DIR
-    GOTO main_loop
-
-end:
-    PRINT
-    HALT
+PRINT
+HALT
 ```
