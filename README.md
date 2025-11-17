@@ -76,3 +76,13 @@ cryst_end:
 PRINT
 HALT
 ```
+
+
+## Execução
+```bash
+make
+make run
+```
+
+
+
