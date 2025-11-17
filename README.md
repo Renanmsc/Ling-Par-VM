@@ -17,6 +17,8 @@ Permite descrever processos laboratoriais simplificados — aquecimento, resfria
 - `halt`: finaliza a simulação.
 
 ---
+![imagem](IMG-20251117-WA0000.jpg)
+
 
 ### Como Mapeia
 
